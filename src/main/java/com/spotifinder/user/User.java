@@ -22,19 +22,19 @@ public class User {
     @Column(name = "UUID")
     private String uuid;
 
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", nullable = false)
     private String username;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD",nullable = false)
     private String password;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL",  nullable = false)
     private String email;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
     @Enumerated
