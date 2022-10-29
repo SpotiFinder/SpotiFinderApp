@@ -3,11 +3,11 @@ package com.spotifinder.utils;
 import java.util.UUID;
 
 
-
 public class UuidGenerator {
 
     /**
      * Generates UUID and converts it to String
+     *
      * @return String
      */
 

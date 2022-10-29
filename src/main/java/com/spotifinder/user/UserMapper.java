@@ -1,17 +1,22 @@
 package com.spotifinder.user;
 
-import org.modelmapper.ModelMapper;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserMapper {
 
 
-    private static ModelMapper mapper = new ModelMapper();
-
     static UserDto mapToDto(User user) {
-        return mapper.map(user, UserDto.class);
+        return new UserDto().toBuilder()
+                .id(user.getId())
+                .uuid(user.getUuid())
+                .password(user.getPassword())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .role(user.getRole())
+                .build();
     }
 
     static List<UserDto> mapToDto(List<User> users) {
@@ -22,7 +27,16 @@ public class UserMapper {
     }
 
     static User mapToModel(UserDto userDto) {
-        return mapper.map(userDto, User.class);
+        return new User().toBuilder()
+                .id(userDto.getId())
+                .uuid(userDto.getUuid())
+                .password(userDto.getPassword())
+                .username(userDto.getUsername())
+                .email(userDto.getEmail())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .role(userDto.getRole())
+                .build();
     }
 
     static List<User> mapToModel(List<UserDto> userDtos) {

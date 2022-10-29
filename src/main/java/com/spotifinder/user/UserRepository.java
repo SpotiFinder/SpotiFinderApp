@@ -10,5 +10,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     List<User> findAll();
 
-    Optional<UserDto> findByUuid(String uuid);
+    Optional<User> findByUuid(String uuid);
 }
