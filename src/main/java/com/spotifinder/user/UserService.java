@@ -16,5 +16,5 @@ public interface UserService {
 
     void deleteByUuid(String uuid);
 
-    UserDto findByUsername(String username);
+    Optional<UserDto> findByUsername(String username);
 }

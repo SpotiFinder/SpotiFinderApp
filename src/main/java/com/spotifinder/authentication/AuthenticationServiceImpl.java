@@ -46,11 +46,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean isLoggedUserIsAdmin() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = auth.getName();
-        UserDto userDto = userService.findByUsername(currentUserName);
-        Optional<User> userOptional = Optional.of(UserMapper.mapToModel(userDto));
-        if (userOptional.isPresent()) {
-            User currentUserEntity = userOptional.get();
-            if (currentUserEntity.getRole().equals(Role.ADMIN)) {
+        Optional<UserDto> userDtoOptional = userService.findByUsername(currentUserName);
+        if (userDtoOptional.isPresent()) {
+            UserDto currentUser = userDtoOptional.get();
+            if (currentUser.getRole().equals(Role.ADMIN)) {
                 return true;
             } else {
                 return false;
