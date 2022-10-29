@@ -2,6 +2,7 @@ package com.spotifinder.user;
 
 import com.spotifinder.exception.UserNotFoundException;
 import com.spotifinder.utils.UuidGenerator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,14 +11,14 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    //private PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository
-                           // PasswordEncoder passwordEncoder
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
-        //this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findByUuid(String uuid) {
-        Optional<User> userDtoOptional = userRepository.findByUuid(uuid);
-        User response = userDtoOptional.orElseThrow(() -> new UserNotFoundException("User with provided Uuid {" + uuid + "} doesn't exist"));
+        Optional<User> userOptional = userRepository.findByUuid(uuid);
+        User response = userOptional.orElseThrow(() -> new UserNotFoundException("User with provided Uuid {" + uuid + "} doesn't exist"));
         UserDto responseDto = UserMapper.mapToDto(response);
         return responseDto;
     }
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     public UserDto save(UserDto userDto) {
         userDto.setUuid(UuidGenerator.generateUuid());
         userDto.setRole(Role.USER);
-        // userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(UserMapper.mapToModel(userDto));
         return UserMapper.mapToDto(savedUser);
     }
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateByUuid(String uuid, UserDto requestBody) {
         UserDto userDtoToUpdate = findByUuid(uuid);
-        // userDtoToUpdate.setPassword(passwordEncoder.encode(requestBody.getPassword()));
+        userDtoToUpdate.setPassword(passwordEncoder.encode(requestBody.getPassword()));
 
         if (requestBody.getFirstName() != null) userDtoToUpdate.setFirstName(requestBody.getFirstName());
         if (requestBody.getEmail() != null) userDtoToUpdate.setEmail(requestBody.getEmail());
@@ -63,5 +64,12 @@ public class UserServiceImpl implements UserService {
         UserDto userToDelete = findByUuid(uuid);
         User user = UserMapper.mapToModel(userToDelete);
         userRepository.delete(user);
+    }
+
+    @Override
+    public UserDto findByUsername(String username) {
+        User response = userRepository.findByUsername(username).orElseThrow(
+                () -> new UserNotFoundException("User with provided username {" + username + "} doesn't exist"));
+        return UserMapper.mapToDto(response);
     }
 }
