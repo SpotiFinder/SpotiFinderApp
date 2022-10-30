@@ -1,5 +1,6 @@
 package com.spotifinder.security;
 
+import com.spotifinder.security.jwt.JwtAuthorizationFilter;
 import com.spotifinder.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.spotifinder.common.PageMappingInfo.*;
 
@@ -34,6 +36,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManager) throws Exception {
         authenticationManager.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
@@ -49,5 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(REGISTER_PAGE).permitAll()
                 .antMatchers(API_PATH + USER_API_PATH + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic();
+
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

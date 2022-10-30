@@ -2,7 +2,10 @@ package com.spotifinder.authentication;
 
 import com.spotifinder.security.UserPrinciple;
 import com.spotifinder.security.jwt.JwtProvider;
-import com.spotifinder.user.*;
+import com.spotifinder.user.Role;
+import com.spotifinder.user.User;
+import com.spotifinder.user.UserDto;
+import com.spotifinder.user.UserService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,9 +18,9 @@ import java.util.Optional;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
-    private JwtProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final JwtProvider jwtProvider;
 
 
     public AuthenticationServiceImpl(AuthenticationManager authenticationManager, UserService userService,
@@ -38,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User signInUser = userPrinciple.getUser();
         signInUser.setToken(jwt);
-
+        System.out.println(signInUser);
         return signInUser;
     }
 
@@ -49,11 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Optional<UserDto> userDtoOptional = userService.findByUsername(currentUserName);
         if (userDtoOptional.isPresent()) {
             UserDto currentUser = userDtoOptional.get();
-            if (currentUser.getRole().equals(Role.ADMIN)) {
-                return true;
-            } else {
-                return false;
-            }
+            return currentUser.getRole().equals(Role.ADMIN);
         } else {
             return false;
         }

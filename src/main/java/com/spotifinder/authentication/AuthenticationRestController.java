@@ -1,7 +1,6 @@
 package com.spotifinder.authentication;
 
 import com.spotifinder.common.PageMappingInfo;
-import com.spotifinder.security.jwt.JwtProvider;
 import com.spotifinder.user.User;
 import com.spotifinder.user.UserDto;
 import com.spotifinder.user.UserService;
@@ -16,19 +15,16 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthenticationRestController {
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    private UserService userService;
+    private final UserService userService;
 
-    private JwtProvider jwtProvider;
-
-    public AuthenticationRestController(AuthenticationService authenticationService, UserService userService,
-                                        JwtProvider jwtProvider) {
+    public AuthenticationRestController(AuthenticationService authenticationService, UserService userService) {
         this.authenticationService = authenticationService;
         this.userService = userService;
-        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping(PageMappingInfo.REGISTER_PAGE)
