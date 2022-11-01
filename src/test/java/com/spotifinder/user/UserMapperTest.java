@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserMapperTest {
 
 
-    private User user = new User(1L, "123-421", "nazwa_usera", "haslo",
-            "email", "imie", "nazwisko", Role.USER);
-    private UserDto userDto = new UserDto(1L, "123-421", "nazwa_usera", "haslo",
-            "email", "imie", "nazwisko", Role.USER);
+    private User user = new User(1L, "123-4210324-234234-4324", "nazwa_usera", "haslo123123",
+            "email@123.pl", "imie", "nazwisko", Role.USER, null);
+    private UserDto userDto = new UserDto(1L, "123-4210324-234234-4324", "nazwa_usera", "haslo123123",
+            "email@123.pl", "imie", "nazwisko", Role.USER);
 
     @Test
     void should_mapToDto() {

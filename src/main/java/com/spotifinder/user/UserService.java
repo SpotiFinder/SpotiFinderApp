@@ -1,6 +1,7 @@
 package com.spotifinder.user;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -14,4 +15,6 @@ public interface UserService {
     UserDto updateByUuid(String uuid, UserDto requestBody);
 
     void deleteByUuid(String uuid);
+
+    Optional<UserDto> findByUsername(String username);
 }

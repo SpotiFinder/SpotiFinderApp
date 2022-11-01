@@ -26,7 +26,7 @@ public class UserMapper {
                 .collect(Collectors.toList());
     }
 
-    static User mapToModel(UserDto userDto) {
+    public static User mapToModel(UserDto userDto) {
         return new User().toBuilder()
                 .id(userDto.getId())
                 .uuid(userDto.getUuid())
