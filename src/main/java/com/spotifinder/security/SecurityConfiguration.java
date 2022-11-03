@@ -3,6 +3,7 @@ package com.spotifinder.security;
 import com.spotifinder.security.jwt.JwtAuthorizationFilter;
 import com.spotifinder.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,12 +14,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.spotifinder.common.PageMappingInfo.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Client
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -51,12 +54,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .formLogin(form -> form.loginPage(LOGIN_PAGE).defaultSuccessUrl("/"))
-                .authorizeRequests()
+                .authorizeHttpRequests()
                 .antMatchers(LOGIN_PAGE).permitAll()
                 .antMatchers(REGISTER_PAGE).permitAll()
+                .antMatchers("/album/**").authenticated()
                 .antMatchers(API_PATH + USER_API_PATH + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic();
 
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
