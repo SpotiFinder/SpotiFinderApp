@@ -24,10 +24,13 @@ public class SpotifyAlbumClient {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer " + tokenValue);
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
-        ResponseEntity<SpotifyAlbum> exchange = restTemplate.exchange("https://api.spotify.com/v1/search?q="+ authorName +"&type=track&market=US&limit=5&offset=5",
+        ResponseEntity<SpotifyAlbum> exchange = restTemplate.exchange("https://api.spotify.com/v1/search?q="+ authorName +"&type=track&market=PL&limit=5&offset=5",
                 HttpMethod.GET,
                 httpEntity,
                 SpotifyAlbum.class);
+
+
+
 
         return exchange.getBody();
 

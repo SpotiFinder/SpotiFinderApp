@@ -21,7 +21,7 @@ import static com.spotifinder.common.PageMappingInfo.*;
 
 @Configuration
 @EnableWebSecurity
-@EnableOAuth2Client
+@EnableOAuth2Sso
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -29,7 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManager) throws Exception {
-        authenticationManager.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+      authenticationManager.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -61,6 +61,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(API_PATH + USER_API_PATH + "/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic();
 
-//        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
